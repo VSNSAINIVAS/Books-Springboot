@@ -1,0 +1,28 @@
+services:
+  mysql:
+    container_name: books_mysql_container
+    build:
+      context: .
+      dockerfile: database/Dockerfile
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE: books
+      MYSQL_USER:
+      MYSQL_PASSWORD:
+    ports:
+      - "3306:3306"
+
+  springboot:
+    container_name: books_spring_boot_container
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "9000:9000"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/books?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME:
+      SPRING_DATASOURCE_PASSWORD:
+    depends_on:
+      - mysql
